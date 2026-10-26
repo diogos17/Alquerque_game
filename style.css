@@ -74,6 +74,7 @@ text-decoration: none;
 .comandos { display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* ===== Layout principal ===== */
+/* Alterar depois (2 colunas ao inves de 3 e colocar jogadores em baixo) */
 .jogo {
 display: grid;
 grid-template-columns: minmax(200px, 260px) minmax(0, 1fr) minmax(200px, 300px);
