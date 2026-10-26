@@ -119,26 +119,6 @@ margin-bottom: 16px;
 }
 .vez { color: var(--verde); font-weight: 700; }
 
-.dado {
-width: 56px; height: 56px;
-padding: 8px;
-display: grid;
-grid-template: repeat(3, 1fr) / repeat(3, 1fr);
-background: #fff;
-border-radius: 12px;
-box-shadow: 0 3px 0 #bbb;
-}
-.dado i { display: none; }
-/* Face 4: cantos (1.º, 3.º, 7.º e 9.º pontos) */
-.dado i:nth-child(1), .dado i:nth-child(3),
-.dado i:nth-child(7), .dado i:nth-child(9) {
-display: block;
-width: 10px; height: 10px;
-margin: auto;
-border-radius: 50%;
-background: #262421;
-}
-
 /* ===== Tabuleiro ===== */
 .tabuleiro-caixa {
 background: var(--painel);
