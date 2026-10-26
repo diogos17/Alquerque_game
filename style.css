@@ -1,0 +1,230 @@
+/* ===== Variáveis (paleta inspirada no chess.com) ===== */
+:root {
+--fundo: #312e2b;
+--painel: #262421;
+--painel-2: #3d3a37;
+--texto: #f0efee;
+--texto-suave: #a9a7a4;
+--verde: #81b64c;
+--verde-escuro: #5d9948;
+--madeira: #b58863;
+--linha: #5a3e2b;
+--raio: 8px;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; height: 100%; }
+
+body {
+background: var(--fundo);
+color: var(--texto);
+font-family: "Segoe UI", "Noto Sans", system-ui, sans-serif;
+line-height: 1.5;
+background-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDAgNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iIzMxMmUyYiIvPjxwYXRoIGQ9Ik03IDggSDMzIE04IDIwIEgzMyBNOCAzMiBIMzMgTTggOCBWMzMgTTIwIDggVjMzIE0zMiA4IFYzMyBNOCA4IEwzMiAzMiBNMzIgOCBMOCAzMiIgc3Ryb2tlPSIjNEQ0RDREIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiLz48L3N2Zz4=");
+background-size: 400px 400px;
+background-position: center center;
+background-repeat: repeat;
+}
+
+h2 { margin: 0 0 12px; font-size: 1.1rem; }
+
+/* ===== Botões ===== */
+.btn {
+display: inline-block;
+padding: 9px 16px;
+border: 0;
+border-radius: var(--raio);
+background: var(--painel-2);
+color: var(--texto);
+font: inherit;
+font-weight: 600;
+text-decoration: none;
+cursor: pointer;
+box-shadow: 0 3px 0 #1f1d1b;
+}
+.btn:hover { background: #4a4743; }
+.btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #1f1d1b; }
+.btn-primario { background: var(--verde); box-shadow: 0 3px 0 var(--verde-escuro); color: #fff; }
+.btn-primario:hover { background: #95c35f; }
+.btn:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible {
+outline: 3px solid #fff;
+outline-offset: 2px;
+}
+
+/* ===== Cabeçalho: logotipo + comandos ===== */
+.topo {
+display: flex;
+flex-wrap: wrap;
+gap: 12px;
+align-items: center;
+justify-content: space-between;
+padding: 10px 20px;
+background: var(--painel);
+}
+.logo {
+display: flex;
+align-items: center;
+gap: 10px;
+color: var(--texto);
+font-size: 1.5rem;
+font-weight: 800;
+text-decoration: none;
+}
+.comandos { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ===== Layout principal ===== */
+.jogo {
+display: grid;
+grid-template-columns: minmax(200px, 260px) minmax(0, 1fr) minmax(200px, 300px);
+gap: 20px;
+max-width: 1200px;
+margin: 20px auto;
+padding: 0 20px;
+}
+.coluna { display: flex; flex-direction: column; gap: 16px; }
+
+.painel {
+background: var(--painel);
+border-radius: var(--raio);
+padding: 16px;
+}
+
+/* ===== Identificação ===== */
+.jogador {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 10px;
+border-radius: var(--raio);
+border: 2px solid transparent;
+}
+.jogador small { display: block; color: var(--texto-suave); }
+.jogador.ativo { background: var(--painel-2); border-color: var(--verde); }
+.avatar {
+width: 40px; height: 40px;
+border-radius: 50%;
+flex: none;
+}
+.avatar.preto  { background: radial-gradient(circle at 35% 30%, #666, #111); }
+.avatar.branco { background: radial-gradient(circle at 35% 30%, #fff, #c9c4bb); }
+
+/* ===== Dado ===== */
+.centro { min-width: 0; }
+.barra-dado {
+display: flex;
+align-items: center;
+gap: 16px;
+margin-bottom: 16px;
+}
+.vez { color: var(--verde); font-weight: 700; }
+
+.dado {
+width: 56px; height: 56px;
+padding: 8px;
+display: grid;
+grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+background: #fff;
+border-radius: 12px;
+box-shadow: 0 3px 0 #bbb;
+}
+.dado i { display: none; }
+/* Face 4: cantos (1.º, 3.º, 7.º e 9.º pontos) */
+.dado i:nth-child(1), .dado i:nth-child(3),
+.dado i:nth-child(7), .dado i:nth-child(9) {
+display: block;
+width: 10px; height: 10px;
+margin: auto;
+border-radius: 50%;
+background: #262421;
+}
+
+/* ===== Tabuleiro ===== */
+.tabuleiro-caixa {
+background: var(--painel);
+padding: 12px;
+border-radius: var(--raio);
+}
+.tabuleiro { display: block; width: 100%; height: auto; max-width: 640px; margin: 0 auto; }
+.madeira { fill: var(--madeira); }
+.linhas { stroke: var(--linha); stroke-width: 4; fill: none; stroke-linecap: round; }
+.pontos circle { fill: var(--linha); }
+
+.peca circle { stroke-width: 3; cursor: pointer; transition: transform .15s; transform-box: fill-box; transform-origin: center; }
+.peca circle:hover { transform: scale(1.06); } /*passar o rato por cima*/
+.peca.preta  circle { fill: #302e2b; stroke: #0f0e0d; }
+.peca.branca circle { fill: #f4f1ea; stroke: #bdb7aa; }
+
+/* ===== Mensagens ===== */
+.mensagens ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.mensagens li {
+background: var(--painel-2);
+padding: 8px 12px;
+border-radius: var(--raio);
+font-size: .95rem;
+}
+
+/* ===== Sobreposições (Instruções, Classificações, Configuração, Identificação) ===== */
+.sobreposicao {
+display: none;
+position: fixed;
+inset: 0;
+z-index: 10;
+align-items: center;
+justify-content: center;
+}
+.sobreposicao:target { display: flex; }   /* abre quando o URL tem #id */
+
+.fundo {
+position: absolute;
+inset: 0;
+background: rgba(0, 0, 0, .65);
+}
+.modal {
+position: relative;
+width: min(440px, calc(100% - 32px));
+max-height: 90vh;
+overflow: auto;
+background: var(--painel);
+border-radius: 12px;
+padding: 24px;
+display: grid;
+gap: 12px;
+box-shadow: 0 10px 40px rgba(0, 0, 0, .5);
+}
+.modal h2 { font-size: 1.4rem; margin: 0; }
+.modal p { margin: 0; color: var(--texto-suave); }
+.fechar {
+position: absolute;
+top: 10px; right: 14px;
+color: var(--texto-suave);
+font-size: 1.8rem;
+line-height: 1;
+text-decoration: none;
+}
+.fechar:hover { color: #fff; }
+
+.modal label { display: grid; gap: 4px; font-weight: 600; }
+.modal input, .modal select {
+padding: 9px 10px;
+border: 2px solid var(--painel-2);
+border-radius: var(--raio);
+background: var(--fundo);
+color: var(--texto);
+font: inherit;
+}
+.modal .btn { text-align: center; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--painel-2); }
+th { color: var(--texto-suave); font-weight: 600; }
+
+/* ===== Responsivo ===== */
+@media (max-width: 900px) {
+.jogo { grid-template-columns: 1fr; }
+.centro { order: -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+* { transition: none !important; }
+}

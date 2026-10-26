@@ -1,12 +1,165 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alquerque</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+
+<!-- ========== CABEÇALHO: logotipo + comandos ========== -->
+<header class="topo">
+  <a class="logo" href="#" aria-label="Alquerque, página inicial">
+    <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
+      <rect width="40" height="40" rx="8" fill="#81b64c"/>
+      <path d="M7 8 H33 M8 20 H33 M8 32 H33 M8 8 V33 M20 8 V33 M32 8 V33 M8 8 L32 32 M32 8 L8 32" stroke="#4D4D4D" stroke-width="2" fill="none"/>
+    </svg>
+    <span>Alquerque</span>
+  </a>
+
+  <!-- Área: Comandos -->
+  <nav class="comandos" aria-label="Comandos">
+    <button class="btn btn-primario">Novo jogo</button>
+    <button class="btn">Desistir</button>
+    <a class="btn" href="#instrucoes">Instruções</a>
+    <a class="btn" href="#classificacoes">Classificações</a>
+    <a class="btn" href="#configuracao">Configuração</a>
+    <a class="btn" href="#identificacao">Entrar</a>
+  </nav>
+</header>
+
+<main class="jogo">
+
+  <!-- Área: Identificação (jogadores) -->
+  <aside class="coluna">
+    <section class="painel" aria-labelledby="t-jogadores">
+      <h2 id="t-jogadores">Jogadores</h2>
+      <div class="jogador">
+        <span class="avatar preto"></span>
+        <div><strong>Computador</strong><small>Peças pretas · 12</small></div>
+      </div>
+      <div class="jogador ativo">
+        <span class="avatar branco"></span>
+        <div><strong>Convidado</strong><small>Peças brancas · 12</small></div>
+      </div>
+    </section>
+  </aside>
+
+  <!-- Área: Dado + Tabuleiro -->
+  <section class="centro" aria-label="Zona de jogo">
+
+    <div class="barra-dado">
+      <div class="dado" role="img" aria-label="Dado: 4">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <button class="btn btn-primario">Lançar dado</button>
+      <span class="vez">É a tua vez</span>
+    </div>
+
+    <div class="tabuleiro-caixa">
+      <svg class="tabuleiro" viewBox="0 0 480 480" role="img" aria-label="Tabuleiro de Alquerque 5x5">
+        <rect width="480" height="480" rx="10" class="madeira"/>
+        <!-- linhas: horizontais, verticais, diagonais e losango -->
+        <path class="linhas" d="
+          M40 40H440M40 140H440M40 240H440M40 340H440M40 440H440
+          M40 40V440M140 40V440M240 40V440M340 40V440M440 40V440
+          M40 40L440 440M440 40L40 440
+          M240 40L440 240L240 440L40 240Z"/>
+        <!-- pontos de intersecção (25) -->
+        <g class="pontos">
+          <circle cx="40"  cy="40"  r="6"/><circle cx="140" cy="40"  r="6"/><circle cx="240" cy="40"  r="6"/><circle cx="340" cy="40"  r="6"/><circle cx="440" cy="40"  r="6"/>
+          <circle cx="40"  cy="140" r="6"/><circle cx="140" cy="140" r="6"/><circle cx="240" cy="140" r="6"/><circle cx="340" cy="140" r="6"/><circle cx="440" cy="140" r="6"/>
+          <circle cx="40"  cy="240" r="6"/><circle cx="140" cy="240" r="6"/><circle cx="240" cy="240" r="6"/><circle cx="340" cy="240" r="6"/><circle cx="440" cy="240" r="6"/>
+          <circle cx="40"  cy="340" r="6"/><circle cx="140" cy="340" r="6"/><circle cx="240" cy="340" r="6"/><circle cx="340" cy="340" r="6"/><circle cx="440" cy="340" r="6"/>
+          <circle cx="40"  cy="440" r="6"/><circle cx="140" cy="440" r="6"/><circle cx="240" cy="440" r="6"/><circle cx="340" cy="440" r="6"/><circle cx="440" cy="440" r="6"/>
+        </g>
+        <!-- peças pretas (12) -->
+        <g class="peca preta">
+          <circle cx="40"  cy="40"  r="34"/><circle cx="140" cy="40"  r="34"/><circle cx="240" cy="40"  r="34"/><circle cx="340" cy="40"  r="34"/><circle cx="440" cy="40"  r="34"/>
+          <circle cx="40"  cy="140" r="34"/><circle cx="140" cy="140" r="34"/><circle cx="240" cy="140" r="34"/><circle cx="340" cy="140" r="34"/><circle cx="440" cy="140" r="34"/>
+          <circle cx="40"  cy="240" r="34"/><circle cx="140" cy="240" r="34"/>
+        </g>
+        <!-- peças brancas (12) -->
+        <g class="peca branca">
+          <circle cx="340" cy="240" r="34"/><circle cx="440" cy="240" r="34"/>
+          <circle cx="40"  cy="340" r="34"/><circle cx="140" cy="340" r="34"/><circle cx="240" cy="340" r="34"/><circle cx="340" cy="340" r="34"/><circle cx="440" cy="340" r="34"/>
+          <circle cx="40"  cy="440" r="34"/><circle cx="140" cy="440" r="34"/><circle cx="240" cy="440" r="34"/><circle cx="340" cy="440" r="34"/><circle cx="440" cy="440" r="34"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Área: Mensagens -->
+  <aside class="coluna">
+    <section class="painel mensagens" aria-labelledby="t-msg" aria-live="polite">
+      <h2 id="t-msg">Mensagens</h2>
+      <ul>
+        <li>Bem-vindo ao Alquerque!</li>
+        <li>Lança o dado para começar.</li>
+      </ul>
+    </section>
+  </aside>
+</main>
+
+<!-- ========== SOBREPOSIÇÕES (abrem por cima do jogo, sem JavaScript) ========== -->
+
+<!-- Área: Instruções -->
+<div class="sobreposicao" id="instrucoes">
+  <a class="fundo" href="#" aria-label="Fechar"></a>
+  <section class="modal" role="dialog" aria-labelledby="t-instr">
+    <a class="fechar" href="#" aria-label="Fechar">×</a>
+    <h2 id="t-instr">Como jogar</h2>
+    <p>Cada jogador começa com 12 peças. Move uma peça por jogada para um ponto vazio ligado por uma linha.</p>
+    <p>Para capturar, salta por cima de uma peça adversária para o ponto vazio logo a seguir, em linha reta.</p>
+    <p>Ganha quem capturar todas as peças do adversário.</p>
+  </section>
+</div>
+
+<!-- Área: Classificações -->
+<div class="sobreposicao" id="classificacoes">
+  <a class="fundo" href="#" aria-label="Fechar"></a>
+  <section class="modal" role="dialog" aria-labelledby="t-class">
+    <a class="fechar" href="#" aria-label="Fechar">×</a>
+    <h2 id="t-class">Classificações</h2>
+    <table>
+      <thead><tr><th>#</th><th>Jogador</th><th>Vitórias</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>—</td><td>0</td></tr>
+        <tr><td>2</td><td>—</td><td>0</td></tr>
+        <tr><td>3</td><td>—</td><td>0</td></tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<!-- Área: Configuração -->
+<div class="sobreposicao" id="configuracao">
+  <a class="fundo" href="#" aria-label="Fechar"></a>
+  <section class="modal" role="dialog" aria-labelledby="t-conf">
+    <a class="fechar" href="#" aria-label="Fechar">×</a>
+    <h2 id="t-conf">Configuração</h2>
+    <label>Adversário
+      <select><option>Computador</option><option>Outro jogador</option></select>
+    </label>
+    <label>Primeiro a jogar
+      <select><option>Brancas</option><option>Pretas</option></select>
+    </label>
+    <a class="btn btn-primario" href="#">Guardar</a>
+  </section>
+</div>
+
+<!-- Área: Identificação -->
+<div class="sobreposicao" id="identificacao">
+  <a class="fundo" href="#" aria-label="Fechar"></a>
+  <section class="modal" role="dialog" aria-labelledby="t-id">
+    <a class="fechar" href="#" aria-label="Fechar">×</a>
+    <h2 id="t-id">Entrar</h2>
+    <label>Nome de utilizador <input type="text" autocomplete="username"></label>
+    <label>Palavra-passe <input type="password" autocomplete="current-password"></label>
+    <a class="btn btn-primario" href="#">Entrar</a>
+  </section>
+</div>
+
 </body>
 </html>
-
