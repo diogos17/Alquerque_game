@@ -45,8 +45,10 @@ box-shadow: 0 3px 0 #1f1d1b;
 }
 .btn:hover { background: #4a4743; }
 .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #1f1d1b; }
-.btn-primario { background: var(--verde); box-shadow: 0 3px 0 var(--verde-escuro); color: #fff; }
-.btn-primario:hover { background: #95c35f; }
+.btn-primario { 
+    background: #b58863; box-shadow: 0 3px 0 #5a3e2b; color: #fff; 
+}
+.btn-primario:hover { background: #b89376; }
 .btn:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible {
 outline: 3px solid #fff;
 outline-offset: 2px;
@@ -74,16 +76,49 @@ text-decoration: none;
 .comandos { display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* ===== Layout principal ===== */
-/* Alterar depois (2 colunas ao inves de 3 e colocar jogadores em baixo) */
 .jogo {
 display: grid;
-grid-template-columns: minmax(200px, 260px) minmax(0, 1fr) minmax(200px, 300px);
-gap: 20px;
-max-width: 1200px;
+grid-template-columns: minmax(0, 1fr) minmax(0, 600px) minmax(0, 1fr);
+align-items: start;
+gap: 80px;
+max-width: 1600px;
 margin: 20px auto;
 padding: 0 20px;
 }
-.coluna { display: flex; flex-direction: column; gap: 16px; }
+
+.coluna {
+display: flex;
+flex-direction: column;
+width: 100%;
+grid-column: 3;
+justify-self: end;
+}
+
+.movimentos {
+min-height: 820px;
+margin-top: 6px;
+display: flex;
+flex-direction: column;
+}
+
+.movimentos ul {
+list-style: none;
+margin: 0;
+padding: 0;
+display: flex;
+flex-direction: column;
+gap: 8px;
+overflow-y: auto; /* scroll */
+}
+
+.centro {
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 100%;
+max-width: 600px;
+grid-column: 2;
+}
 
 .painel {
 background: var(--painel);
@@ -100,24 +135,20 @@ padding: 10px;
 border-radius: var(--raio);
 border: 2px solid transparent;
 }
+.jogador-painel {
+    width: 100%;
+    margin: 8px 0;
+}
 .jogador small { display: block; color: var(--texto-suave); }
-.jogador.ativo { background: var(--painel-2); border-color: var(--verde); }
+.jogador.ativo { background: var(--painel-2); border-color: #b58863; }
 .avatar {
 width: 40px; height: 40px;
 border-radius: 50%;
 flex: none;
 }
-.avatar.preto  { background: radial-gradient(circle at 35% 30%, #666, #111); }
-.avatar.branco { background: radial-gradient(circle at 35% 30%, #fff, #c9c4bb); }
+.avatar.azul  { background: radial-gradient(circle at 35% 30%, #0F4C81, #111); }
+.avatar.vermelho { background: radial-gradient(circle at 35% 30%, #b11509, #111); }
 
-/* ===== Dado ===== */
-.centro { min-width: 0; }
-.barra-dado {
-display: flex;
-align-items: center;
-gap: 16px;
-margin-bottom: 16px;
-}
 .vez { color: var(--verde); font-weight: 700; }
 
 /* ===== Tabuleiro ===== */
@@ -125,6 +156,7 @@ margin-bottom: 16px;
 background: var(--painel);
 padding: 12px;
 border-radius: var(--raio);
+width: 100%;
 }
 .tabuleiro { display: block; width: 100%; height: auto; max-width: 640px; margin: 0 auto; }
 .madeira { fill: var(--madeira); }
@@ -133,12 +165,12 @@ border-radius: var(--raio);
 
 .peca circle { stroke-width: 3; cursor: pointer; transition: transform .15s; transform-box: fill-box; transform-origin: center; }
 .peca circle:hover { transform: scale(1.06); } /*passar o rato por cima*/
-.peca.preta  circle { fill: #302e2b; stroke: #0f0e0d; }
-.peca.branca circle { fill: #f4f1ea; stroke: #bdb7aa; }
+.peca.azul  circle { fill: #0F4C81; stroke: #0f0e0d; }
+.peca.vermelha circle { fill: #b11509; stroke: #0f0e0d; }
 
-/* ===== Mensagens ===== */
-.mensagens ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.mensagens li {
+/* ===== Movimentos ===== */
+.movimentos ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.movimentos li {
 background: var(--painel-2);
 padding: 8px 12px;
 border-radius: var(--raio);
@@ -199,13 +231,3 @@ font: inherit;
 table { width: 100%; border-collapse: collapse; }
 th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--painel-2); }
 th { color: var(--texto-suave); font-weight: 600; }
-
-/* ===== Responsivo ===== */
-@media (max-width: 900px) {
-.jogo { grid-template-columns: 1fr; }
-.centro { order: -1; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-* { transition: none !important; }
-}

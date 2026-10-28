@@ -12,8 +12,8 @@
 <header class="topo">
   <a class="logo" href="#" aria-label="Alquerque, página inicial">
     <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
-      <rect width="40" height="40" rx="8" fill="#81b64c"/>
-      <path d="M7 8 H33 M8 20 H33 M8 32 H33 M8 8 V33 M20 8 V33 M32 8 V33 M8 8 L32 32 M32 8 L8 32" stroke="#4D4D4D" stroke-width="2" fill="none"/>
+      <rect width="40" height="40" rx="8" fill="#b58863"/>
+      <path d="M7 8 H33 M8 20 H33 M8 32 H33 M8 8 V33 M20 8 V33 M32 8 V33 M8 8 L32 32 M32 8 L8 32" stroke="#5a3e2b" stroke-width="2" fill="none"/>
     </svg>
     <span>Alquerque</span>
   </a>
@@ -31,23 +31,17 @@
 
 <main class="jogo">
 
-  <!-- Área: Identificação (jogadores) -->
-  <aside class="coluna">
-    <section class="painel" aria-labelledby="t-jogadores">
-      <h2 id="t-jogadores">Jogadores</h2>
-      <div class="jogador">
-        <span class="avatar preto"></span>
-        <div><strong>Computador</strong><small>Peças pretas · 12</small></div>
-      </div>
-      <div class="jogador ativo">
-        <span class="avatar branco"></span>
-        <div><strong>Convidado</strong><small>Peças brancas · 12</small></div>
-      </div>
-    </section>
-  </aside>
-
   <!-- Área: Tabuleiro -->
   <section class="centro" aria-label="Zona de jogo">
+
+    <!-- Jogador das Azuis -->
+
+    <div class="painel jogador-painel">
+      <div class="jogador">
+        <span class="avatar azul"></span>
+        <div><strong>Computador</strong><small>Peças Azuis · 12</small></div>
+      </div>
+    </div>
 
     <div class="tabuleiro-caixa">
       <svg class="tabuleiro" viewBox="0 0 480 480" role="img" aria-label="Tabuleiro de Alquerque 5x5">
@@ -66,25 +60,36 @@
           <circle cx="40"  cy="340" r="6"/><circle cx="140" cy="340" r="6"/><circle cx="240" cy="340" r="6"/><circle cx="340" cy="340" r="6"/><circle cx="440" cy="340" r="6"/>
           <circle cx="40"  cy="440" r="6"/><circle cx="140" cy="440" r="6"/><circle cx="240" cy="440" r="6"/><circle cx="340" cy="440" r="6"/><circle cx="440" cy="440" r="6"/>
         </g>
-        <!-- peças pretas (12) -->
-        <g class="peca preta">
+        <!-- peças azuis (12) -->
+        <g class="peca azul">
           <circle cx="40"  cy="40"  r="34"/><circle cx="140" cy="40"  r="34"/><circle cx="240" cy="40"  r="34"/><circle cx="340" cy="40"  r="34"/><circle cx="440" cy="40"  r="34"/>
           <circle cx="40"  cy="140" r="34"/><circle cx="140" cy="140" r="34"/><circle cx="240" cy="140" r="34"/><circle cx="340" cy="140" r="34"/><circle cx="440" cy="140" r="34"/>
           <circle cx="40"  cy="240" r="34"/><circle cx="140" cy="240" r="34"/>
         </g>
-        <!-- peças brancas (12) -->
-        <g class="peca branca">
+        <!-- peças vermelhas (12) -->
+        <g class="peca vermelha">
           <circle cx="340" cy="240" r="34"/><circle cx="440" cy="240" r="34"/>
           <circle cx="40"  cy="340" r="34"/><circle cx="140" cy="340" r="34"/><circle cx="240" cy="340" r="34"/><circle cx="340" cy="340" r="34"/><circle cx="440" cy="340" r="34"/>
           <circle cx="40"  cy="440" r="34"/><circle cx="140" cy="440" r="34"/><circle cx="240" cy="440" r="34"/><circle cx="340" cy="440" r="34"/><circle cx="440" cy="440" r="34"/>
         </g>
       </svg>
     </div>
+
+     <!-- Jogador Vermelho (em baixo) -->
+    <div class="painel jogador-painel">
+      <div class="jogador ativo">
+        <span class="avatar vermelho"></span>
+        <div><strong>Convidado</strong><small>Peças Vermelhas · 12</small></div>
+      </div>
+    </div>
+
   </section>
+
+  
 
   <!-- Área: Movimentos -->
   <aside class="coluna">
-    <section class="painel mensagens" aria-labelledby="t-msg" aria-live="polite">
+    <section class="painel movimentos" aria-labelledby="t-msg" aria-live="polite">
       <h2 id="t-msg">Movimentos</h2>
       <ul>
       </ul>
@@ -133,7 +138,7 @@
       <select><option>Computador</option><option>Outro jogador</option></select>
     </label>
     <label>Primeiro a jogar
-      <select><option>Brancas</option><option>Pretas</option></select>
+      <select><option>Vermelhas</option><option>Azuis</option></select>
     </label>
     <a class="btn btn-primario" href="#">Guardar</a>
   </section>
