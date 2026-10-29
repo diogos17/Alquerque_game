@@ -218,6 +218,7 @@ class Jogo {
     this.seq = null;        // captura múltipla em curso
     this.vez = this.humano;
     this.nota = "";
+    this.numeroRonda = 0;
     this.svg = $("tabuleiro");
     this.constroiSvg();
     this.ligaEventos();
@@ -295,10 +296,64 @@ class Jogo {
 
   msg(t) { $("mensagens").textContent = t; }
 
-  log(t) {
-    const li = document.createElement("li");
-    li.textContent = t;
+  // Histórico Movimentos
+
+  log(t, cor) {
     const lista = $("lista-movimentos");
+    if (cor !== VERMELHA && cor !== AZUL) {
+      const evento = document.createElement("li");
+      evento.className = "evento-movimento";
+      evento.textContent = t;
+      lista.append(evento);
+      while (lista.children.length > MAX_LOG) lista.firstElementChild.remove();
+      return;
+    }
+
+    const rondas = lista.querySelectorAll(".linha-movimentos");
+    const ultimaLinha = rondas[rondas.length - 1];
+
+    let celula;
+
+    if (ultimaLinha) {
+      if (cor === VERMELHA) {
+        celula = ultimaLinha.querySelector(".vermelhas");
+      } else if (cor === AZUL) {
+        celula = ultimaLinha.querySelector(".azuis");
+      }
+    }
+
+    if (celula && celula.textContent === "") {
+      celula.textContent = t;
+      const vermelha = ultimaLinha.querySelector(".vermelhas");
+      const azul = ultimaLinha.querySelector(".azuis");
+
+      if (vermelha.textContent !== "" && azul.textContent !== "") {
+        ultimaLinha.classList.add("ronda-completa");
+      }
+      return;
+    }
+
+    const li = document.createElement("li");
+    li.className = "linha-movimentos";
+    const numero = document.createElement("div");
+    numero.className = "numero";
+    this.numeroRonda++;
+    numero.textContent = `${this.numeroRonda}.`;
+
+    const vermelhas = document.createElement("div");
+    vermelhas.className = "jogada vermelhas";
+
+    const azuis = document.createElement("div");
+    azuis.className = "jogada azuis";
+
+    if (cor === VERMELHA) {
+      vermelhas.textContent = t;
+    } else if (cor === AZUL) {
+      azuis.textContent = t;
+    }
+
+    li.append(numero, vermelhas, azuis);
+
     lista.append(li);
     while (lista.children.length > MAX_LOG) lista.firstElementChild.remove();   // apaga as mais antigas
   }
@@ -316,6 +371,7 @@ class Jogo {
     this.proximaProposta = 30;
     this.empateProposto = false;
     this.nota = "";
+    this.numeroRonda = 0;
     $("lista-movimentos").replaceChildren();
     this.iniciaJogada();
   }
@@ -391,7 +447,7 @@ class Jogo {
     if (this.tab.simplesDe(sr, sc, h).some((p) => igual(p, [r, c]))) {      // movimento simples
       const mov = { de: this.sel, para: [r, c] };
       this.tab.aplica(mov);
-      this.log(`${NOME[h]}: ${descreve(mov)}`);
+      this.log(`${NOME[h]}: ${descreve(mov)}`, h);
       return this.terminaJogada(mov);
     }
     const salto = this.tab.saltos(sr, sc, h, new Set([chave(sr, sc)])).find((j) => igual(j.para, [r, c]));
@@ -426,7 +482,7 @@ class Jogo {
 
   fimSequencia() {
     const mov = { de: this.seq.de, passos: this.seq.passos };
-    this.log(`${NOME[this.humano]}: ${descreve(mov)}`);
+    this.log(`${NOME[this.humano]}: ${descreve(mov)}`, this.humano);
     this.seq = null;
     this.sel = null;
     this.terminaJogada(mov);
@@ -457,7 +513,7 @@ class Jogo {
     const mov = this.ia.escolhe(this.tab, this.pc);
     if (!mov) return this.fim(this.humano, "O computador ficou sem jogadas.");
     this.tab.aplica(mov);
-    this.log(`${NOME[this.pc]}: ${descreve(mov)}`);
+    this.log(`${NOME[this.pc]}: ${descreve(mov)}`, this.pc);
     this.nota = `${nota}O computador jogou ${descreve(mov)}.`;
     this.terminaJogada(mov);
   }

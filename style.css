@@ -171,10 +171,18 @@ width: 100%;
 /* ===== Movimentos ===== */
 .movimentos ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .movimentos li {
-background: var(--painel-2);
+display: grid;
+grid-template-columns: 30px 1fr 1fr;
+gap: 8px;
 padding: 8px 12px;
-border-radius: var(--raio);
 font-size: .95rem;
+}
+.movimentos li.linha-movimentos.ronda-completa {
+  border-bottom: 1px solid var(--texto-suave);
+}
+.movimentos li.evento-movimento {
+display: block;
+grid-column: 1 / -1;
 }
 
 /* ===== Sobreposições (Instruções, Classificações, Configuração, Identificação) ===== */
