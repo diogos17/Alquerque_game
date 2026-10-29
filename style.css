@@ -231,3 +231,12 @@ font: inherit;
 table { width: 100%; border-collapse: collapse; }
 th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--painel-2); }
 th { color: var(--texto-suave); font-weight: 600; }
+/* ===== Mensagens e estados do tabuleiro (gerado por script.js) ===== */
+.mensagem { width: 100%; min-height: 4.2em; margin: 0 0 8px; font-weight: 600; }
+.linhas, .pontos { pointer-events: none; }
+.hit { fill: transparent; }
+.destino { fill: var(--verde); opacity: .9; cursor: pointer; }
+.peca circle.sel { stroke: #fff; stroke-width: 6; }
+.peca circle.sopravel { stroke: #ffb020; stroke-width: 6; stroke-dasharray: 10 6; }
+.tabuleiro[data-modo="inativo"], .tabuleiro[data-modo="espera"] { cursor: not-allowed; }
+.tabuleiro[data-modo="destino"], .tabuleiro[data-modo="captura"] { cursor: crosshair; }
