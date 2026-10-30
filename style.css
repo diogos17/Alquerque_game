@@ -1,4 +1,4 @@
-/* ===== Variáveis (paleta inspirada no chess.com) ===== */
+/* ===== Cores e Variáveis ===== */
 :root {
 --fundo: #312e2b;
 --painel: #262421;
@@ -39,10 +39,12 @@ background: var(--painel-2);
 color: var(--texto);
 font: inherit;
 font-weight: 600;
+/* Remover underlines automaticos do browser */
 text-decoration: none;
 cursor: pointer;
 box-shadow: 0 3px 0 #1f1d1b;
 }
+
 .btn:hover { background: #4a4743; }
 .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #1f1d1b; }
 .btn-primario { 
@@ -78,6 +80,7 @@ text-decoration: none;
 /* ===== Layout principal ===== */
 .jogo {
 display: grid;
+/* "3" colunas */
 grid-template-columns: minmax(0, 1fr) minmax(0, 600px) minmax(0, 1fr);
 align-items: start;
 gap: 80px;
@@ -141,13 +144,14 @@ border: 2px solid transparent;
 }
 .jogador small { display: block; color: var(--texto-suave); }
 .jogador.ativo { background: var(--painel-2); border-color: #b58863; }
+
 .avatar {
 width: 40px; height: 40px;
 border-radius: 50%;
 flex: none;
 }
-.avatar.azul  { background: radial-gradient(circle at 35% 30%, #0F4C81, #111); }
-.avatar.vermelho { background: radial-gradient(circle at 35% 30%, #b11509, #111); }
+.avatar.azul  { background: #0F4C81; border: 2px solid #0f0e0d;}
+.avatar.vermelho { background: #b11509; border: 2px solid #0f0e0d;}
 
 .vez { color: var(--verde); font-weight: 700; }
 
@@ -175,10 +179,10 @@ display: grid;
 grid-template-columns: 30px 1fr 1fr;
 gap: 8px;
 padding: 8px 12px;
-font-size: .95rem;
+font-size: .95rem; /* 95% do tamanho do valor global*/
 }
 .movimentos li.linha-movimentos.ronda-completa {
-  border-bottom: 1px solid var(--texto-suave);
+  border-bottom: 1px solid #4a4743;
 }
 .movimentos li.evento-movimento {
 display: block;
@@ -239,6 +243,7 @@ font: inherit;
 table { width: 100%; border-collapse: collapse; }
 th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--painel-2); }
 th { color: var(--texto-suave); font-weight: 600; }
+
 /* ===== Mensagens e estados do tabuleiro (gerado por script.js) ===== */
 .mensagem { width: 100%; min-height: 4.2em; margin: 0 0 8px; font-weight: 600; }
 .linhas, .pontos { pointer-events: none; }
