@@ -46,7 +46,11 @@ class Tabuleiro {
 
   pecas(cor) {
     const l = [];
-    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) if (this.g[r][c] === cor) l.push([r, c]);
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        if (this.g[r][c] === cor) l.push([r, c]);
+      }
+    }
     return l;
   }
 
@@ -56,7 +60,9 @@ class Tabuleiro {
     for (const [dr, dc] of DIRS) {
       if (dr === -frente(cor)) continue;
       const r2 = r + dr, c2 = c + dc;
-      if (Tabuleiro.temLinha(r, c, dr, dc) && Tabuleiro.dentro(r2, c2) && this.g[r2][c2] === VAZIO) res.push([r2, c2]);
+      if (Tabuleiro.temLinha(r, c, dr, dc) && Tabuleiro.dentro(r2, c2) && this.g[r2][c2] === VAZIO) {
+        res.push([r2, c2]);
+      }
     }
     return res;
   }
@@ -85,7 +91,7 @@ class Tabuleiro {
     return l;
   }
 
-  // Todas as capturas (múltiplas) até não haver mais saltos. Cada uma: { de, passos: [{meio, para}] }
+  // Todas as capturas (múltiplas) até não haver mais saltos. 
   sequencias(cor) {
     const out = [];
     for (const [r, c] of this.pecas(cor)) this._seq([r, c], r, c, cor, new Set([chave(r, c)]), [], out);
