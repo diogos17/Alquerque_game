@@ -582,5 +582,4 @@ class Jogo {
   }
 }
 
-if (typeof document !== "undefined") document.addEventListener("DOMContentLoaded", () => new Jogo());
-if (typeof module !== "undefined") module.exports = { Tabuleiro, IA, AZUL, VERMELHA, oposta };
+new Jogo();
