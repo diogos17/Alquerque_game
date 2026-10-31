@@ -1,4 +1,4 @@
-/* ===== Variáveis (paleta inspirada no chess.com) ===== */
+/* ===== Cores e Variáveis ===== */
 :root {
 --fundo: #312e2b;
 --painel: #262421;
@@ -39,10 +39,12 @@ background: var(--painel-2);
 color: var(--texto);
 font: inherit;
 font-weight: 600;
+/* Remover underlines automaticos do browser */
 text-decoration: none;
 cursor: pointer;
 box-shadow: 0 3px 0 #1f1d1b;
 }
+
 .btn:hover { background: #4a4743; }
 .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #1f1d1b; }
 .btn-primario { 
@@ -78,6 +80,7 @@ text-decoration: none;
 /* ===== Layout principal ===== */
 .jogo {
 display: grid;
+/* "3" colunas */
 grid-template-columns: minmax(0, 1fr) minmax(0, 600px) minmax(0, 1fr);
 align-items: start;
 gap: 80px;
@@ -141,13 +144,14 @@ border: 2px solid transparent;
 }
 .jogador small { display: block; color: var(--texto-suave); }
 .jogador.ativo { background: var(--painel-2); border-color: #b58863; }
+
 .avatar {
 width: 40px; height: 40px;
 border-radius: 50%;
 flex: none;
 }
-.avatar.azul  { background: radial-gradient(circle at 35% 30%, #0F4C81, #111); }
-.avatar.vermelho { background: radial-gradient(circle at 35% 30%, #b11509, #111); }
+.avatar.azul  { background: #0F4C81; border: 2px solid #0f0e0d;}
+.avatar.vermelho { background: #b11509; border: 2px solid #0f0e0d;}
 
 .vez { color: var(--verde); font-weight: 700; }
 
@@ -158,23 +162,54 @@ padding: 12px;
 border-radius: var(--raio);
 width: 100%;
 }
-.tabuleiro { display: block; width: 100%; height: auto; max-width: 640px; margin: 0 auto; }
-.madeira { fill: var(--madeira); }
-.linhas { stroke: var(--linha); stroke-width: 4; fill: none; stroke-linecap: round; }
-.pontos circle { fill: var(--linha); }
 
-.peca circle { stroke-width: 3; cursor: pointer; transition: transform .15s; transform-box: fill-box; transform-origin: center; }
-.peca circle:hover { transform: scale(1.06); } /*passar o rato por cima*/
-.peca.azul  circle { fill: #0F4C81; stroke: #0f0e0d; }
-.peca.vermelha circle { fill: #b11509; stroke: #0f0e0d; }
+
+/* Tabuleiro feito com <div>s, posicionados em % pelo script.js */
+.tabuleiro {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  background: var(--madeira);
+  border-radius: 10px;
+}
+.linha  { position: absolute; height: .85%; background: var(--linha); border-radius: 999px; pointer-events: none; }
+.ponto  { position: absolute; width: 2.5%; aspect-ratio: 1; border-radius: 50%; background: var(--linha);
+          transform: translate(-50%, -50%); pointer-events: none; }
+.hit    { position: absolute; width: 18%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); }
+.camada { position: absolute; inset: 0; pointer-events: none; }
+.camada > * { pointer-events: auto; }
+
+.peca {
+  position: absolute; width: 14.2%; aspect-ratio: 1; border: 3px solid #0f0e0d; border-radius: 50%;
+  transform: translate(-50%, -50%); cursor: pointer; transition: transform .15s;
+}
+.peca:hover { transform: translate(-50%, -50%) scale(1.06); } /* passar o rato por cima */
+.peca.azul { background: #0F4C81; }
+.peca.vermelha { background: #b11509; }
+.peca.sel { border-color: #fff; border-width: 6px; }
+.peca.sopravel { border: 5px dashed #ffb020; }
+.destino {
+  position: absolute; width: 6.7%; aspect-ratio: 1; border-radius: 50%;
+  background: var(--verde); opacity: .9; cursor: pointer; transform: translate(-50%, -50%);
+}
 
 /* ===== Movimentos ===== */
 .movimentos ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .movimentos li {
-background: var(--painel-2);
+display: grid;
+grid-template-columns: 30px 1fr 1fr;
+gap: 8px;
 padding: 8px 12px;
-border-radius: var(--raio);
-font-size: .95rem;
+font-size: .95rem; /* 95% do tamanho do valor global*/
+}
+.movimentos li.linha-movimentos.ronda-completa {
+  border-bottom: 1px solid #4a4743;
+}
+.movimentos li.evento-movimento {
+display: block;
+grid-column: 1 / -1;
 }
 
 /* ===== Sobreposições (Instruções, Classificações, Configuração, Identificação) ===== */
@@ -231,12 +266,8 @@ font: inherit;
 table { width: 100%; border-collapse: collapse; }
 th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--painel-2); }
 th { color: var(--texto-suave); font-weight: 600; }
+
 /* ===== Mensagens e estados do tabuleiro (gerado por script.js) ===== */
 .mensagem { width: 100%; min-height: 4.2em; margin: 0 0 8px; font-weight: 600; }
-.linhas, .pontos { pointer-events: none; }
-.hit { fill: transparent; }
-.destino { fill: var(--verde); opacity: .9; cursor: pointer; }
-.peca circle.sel { stroke: #fff; stroke-width: 6; }
-.peca circle.sopravel { stroke: #ffb020; stroke-width: 6; stroke-dasharray: 10 6; }
 .tabuleiro[data-modo="inativo"], .tabuleiro[data-modo="espera"] { cursor: not-allowed; }
 .tabuleiro[data-modo="destino"], .tabuleiro[data-modo="captura"] { cursor: crosshair; }

@@ -1,5 +1,12 @@
 "use strict";
 
+/* =====================================================================
+   Alquerque - 1.ª entrega
+   Estrutura:
+     Tabuleiro : dados e regras (sem DOM)
+     IA        : escolha das jogadas do computador (sem DOM)
+     Jogo      : interface (DOM), turnos, sopro, mensagens, classificações
+   ===================================================================== */
 
 const N = 5;
 const VAZIO = 0, AZUL = 1, VERMELHA = 2;
@@ -144,7 +151,7 @@ class IA {
   }
 
   // Probabilidade de soprar uma peça quando é possível.
-  decideSoprar() { return Math.random() < { 1: 0.3, 2: 0.7, 3: 1 }[this.nivel]; }
+  decideSoprar() { return Math.random() < { 1: 0.3, 2: 0.7, 3: 1 }[this.nivel]; } // 30% probabilidade na dif facil, 70% no medio e 100% no dificil
 
   // Na pesquisa a captura é sempre obrigatória.
   static movs(t, cor) {
@@ -194,14 +201,25 @@ class IA {
 }
 
 /* ============================ Interface ============================ */
-const NS = "http://www.w3.org/2000/svg";
-const XY = (i) => 40 + 100 * i;
-const mk = (tag, attrs = {}, cls = "") => {
-  const e = document.createElementNS(NS, tag);
-  for (const k in attrs) e.setAttribute(k, attrs[k]);
-  if (cls) e.setAttribute("class", cls);
+const pct = (i) => (40 + 100 * i) / 4.8;     // posição (em %) da linha/coluna i dentro do tabuleiro
+
+// Cria um <div> com a classe dada
+const mk = (cls, estilo = {}) => {
+  const e = document.createElement("div");
+  e.className = cls;
+  Object.assign(e.style, estilo);
   return e;
 };
+// <div> centrado na posição (linha r, coluna c); guarda as coordenadas para o clique
+const noPonto = (cls, r, c) => {
+  const e = mk(cls, { left: pct(c) + "%", top: pct(r) + "%" });
+  e.dataset.r = r;
+  e.dataset.c = c;
+  return e;
+};
+// segmento de linha: centro (cx,cy) em %, comprimento em % e ângulo em graus
+const linha = (cx, cy, comp, ang) =>
+  mk("linha", { left: cx + "%", top: cy + "%", width: comp + "%", transform: `translate(-50%, -50%) rotate(${ang}deg)` });
 const $ = (id) => document.getElementById(id);
 const CHAVE_CLASSIF = "alquerque.classificacoes";
 const MAX_LOG = 30;      // máximo de linhas no registo de movimentos
@@ -218,37 +236,38 @@ class Jogo {
     this.seq = null;        // captura múltipla em curso
     this.vez = this.humano;
     this.nota = "";
-    this.svg = $("tabuleiro");
-    this.constroiSvg();
-    this.ligaEventos();
+    this.numeroRonda = 0;
+    this.caixa = $("tabuleiro");
+    this.constroiTabuleiro();
+    this.Eventos();
     this.renderClassificacoes();
     this.atualiza();
     this.msg("Carrega em «Novo jogo» para começar.");
   }
 
-  /* ---------- construção do tabuleiro (DOM/SVG) ---------- */
-  constroiSvg() {
-    const s = this.svg;
-    s.replaceChildren();
-    s.append(mk("rect", { width: 480, height: 480, rx: 10 }, "madeira"));
-    const hits = mk("g");
-    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
-      hits.append(mk("circle", { cx: XY(c), cy: XY(r), r: 44, "data-r": r, "data-c": c }, "hit"));
-    }
-    let d = "";
-    for (let i = 0; i < N; i++) d += `M${XY(0)} ${XY(i)}H${XY(4)}M${XY(i)} ${XY(0)}V${XY(4)}`;
-    d += `M${XY(0)} ${XY(0)}L${XY(4)} ${XY(4)}M${XY(4)} ${XY(0)}L${XY(0)} ${XY(4)}`;
-    d += `M${XY(2)} ${XY(0)}L${XY(4)} ${XY(2)}L${XY(2)} ${XY(4)}L${XY(0)} ${XY(2)}Z`;
-    const pontos = mk("g", {}, "pontos");
-    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) pontos.append(mk("circle", { cx: XY(c), cy: XY(r), r: 6 }));
-    this.gMarcas = mk("g");
-    this.gAzul = mk("g", {}, "peca azul");
-    this.gVerm = mk("g", {}, "peca vermelha");
-    s.append(hits, mk("path", { d }, "linhas"), pontos, this.gMarcas, this.gAzul, this.gVerm);
+  constroiTabuleiro() {
+    const t = this.caixa;
+    t.replaceChildren();
+    // zonas de clique (por baixo de tudo)
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) t.append(noPonto("hit", r, c));
+    // linhas horizontais e verticais
+    const comp = pct(4) - pct(0);
+    for (let i = 0; i < N; i++) t.append(linha(50, pct(i), comp, 0), linha(pct(i), 50, comp, 90));
+    // diagonais grandes e losango
+    t.append(linha(50, 50, comp * Math.SQRT2, 45), linha(50, 50, comp * Math.SQRT2, -45));
+    const lado = (comp * Math.SQRT2) / 2;
+    t.append(linha(pct(3), pct(1), lado, 45), linha(pct(3), pct(3), lado, -45),
+             linha(pct(1), pct(3), lado, 45), linha(pct(1), pct(1), lado, -45));
+    // as 25 posições
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) t.append(noPonto("ponto", r, c));
+    // camadas dinâmicas: marcas de destino e peças (redesenhadas a cada alteração)
+    this.gMarcas = mk("camada");
+    this.gPecas = mk("camada");
+    t.append(this.gMarcas, this.gPecas);
   }
 
-  ligaEventos() {
-    this.svg.addEventListener("click", (e) => {
+  Eventos() {
+    this.caixa.addEventListener("click", (e) => {
       const el = e.target.closest("[data-r]");
       if (el) this.clique(Number(el.dataset.r), Number(el.dataset.c));
     });
@@ -260,17 +279,18 @@ class Jogo {
 
   /* ---------- desenho ---------- */
   desenha() {
-    this.gMarcas.replaceChildren(); this.gAzul.replaceChildren(); this.gVerm.replaceChildren();
+    this.gMarcas.replaceChildren();
+    this.gPecas.replaceChildren();
     const mostraSopro = this.ativo && this.vez === this.humano && !this.jaSoprou && !this.sel && !this.seq;
     for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
       const v = this.tab.g[r][c];
       if (!v) continue;
-      let cls = "";
-      if (this.sel && igual(this.sel, [r, c])) cls = "sel";
-      else if (mostraSopro && this.sopravel.some((p) => igual(p, [r, c]))) cls = "sopravel";
-      (v === AZUL ? this.gAzul : this.gVerm).append(mk("circle", { cx: XY(c), cy: XY(r), r: 34, "data-r": r, "data-c": c }, cls));
+      let cls = "peca " + (v === AZUL ? "azul" : "vermelha");
+      if (this.sel && igual(this.sel, [r, c])) cls += " sel";
+      else if (mostraSopro && this.sopravel.some((p) => igual(p, [r, c]))) cls += " sopravel";
+      this.gPecas.append(noPonto(cls, r, c));
     }
-    for (const [r, c] of this.destinos()) this.gMarcas.append(mk("circle", { cx: XY(c), cy: XY(r), r: 16, "data-r": r, "data-c": c }, "destino"));
+    for (const [r, c] of this.destinos()) this.gMarcas.append(noPonto("destino", r, c));
   }
 
   destinos() {
@@ -289,16 +309,70 @@ class Jogo {
     $("btn-empate").textContent = this.empateProposto ? "Aceitar empate" : "Propor empate";
     let modo = "inativo";
     if (this.ativo) modo = this.vez !== this.humano ? "espera" : this.seq ? "captura" : this.sel ? "destino" : "selecionar";
-    this.svg.dataset.modo = modo;       // o CSS muda o cursor consoante o modo
+    this.caixa.dataset.modo = modo;       // o CSS muda o cursor consoante o modo
     this.desenha();
   }
 
   msg(t) { $("mensagens").textContent = t; }
 
-  log(t) {
-    const li = document.createElement("li");
-    li.textContent = t;
+  // Histórico Movimentos
+
+  log(t, cor) {
     const lista = $("lista-movimentos");
+    if (cor !== VERMELHA && cor !== AZUL) {
+      const evento = document.createElement("li");
+      evento.className = "evento-movimento";
+      evento.textContent = t;
+      lista.append(evento);
+      while (lista.children.length > MAX_LOG) lista.firstElementChild.remove();
+      return;
+    }
+
+    const rondas = lista.querySelectorAll(".linha-movimentos");
+    const ultimaLinha = rondas[rondas.length - 1];
+
+    let celula;
+
+    if (ultimaLinha) {
+      if (cor === VERMELHA) {
+        celula = ultimaLinha.querySelector(".vermelhas");
+      } else if (cor === AZUL) {
+        celula = ultimaLinha.querySelector(".azuis");
+      }
+    }
+
+    if (celula && celula.textContent === "") {
+      celula.textContent = t;
+      const vermelha = ultimaLinha.querySelector(".vermelhas");
+      const azul = ultimaLinha.querySelector(".azuis");
+
+      if (vermelha.textContent !== "" && azul.textContent !== "") {
+        ultimaLinha.classList.add("ronda-completa");
+      }
+      return;
+    }
+
+    const li = document.createElement("li");
+    li.className = "linha-movimentos";
+    const numero = document.createElement("div");
+    numero.className = "numero";
+    this.numeroRonda++;
+    numero.textContent = `${this.numeroRonda}.`;
+
+    const vermelhas = document.createElement("div");
+    vermelhas.className = "jogada vermelhas";
+
+    const azuis = document.createElement("div");
+    azuis.className = "jogada azuis";
+
+    if (cor === VERMELHA) {
+      vermelhas.textContent = t;
+    } else if (cor === AZUL) {
+      azuis.textContent = t;
+    }
+
+    li.append(numero, vermelhas, azuis);
+
     lista.append(li);
     while (lista.children.length > MAX_LOG) lista.firstElementChild.remove();   // apaga as mais antigas
   }
@@ -316,6 +390,7 @@ class Jogo {
     this.proximaProposta = 30;
     this.empateProposto = false;
     this.nota = "";
+    this.numeroRonda = 0;
     $("lista-movimentos").replaceChildren();
     this.iniciaJogada();
   }
@@ -391,7 +466,7 @@ class Jogo {
     if (this.tab.simplesDe(sr, sc, h).some((p) => igual(p, [r, c]))) {      // movimento simples
       const mov = { de: this.sel, para: [r, c] };
       this.tab.aplica(mov);
-      this.log(`${NOME[h]}: ${descreve(mov)}`);
+      this.log(`${NOME[h]}: ${descreve(mov)}`, h);
       return this.terminaJogada(mov);
     }
     const salto = this.tab.saltos(sr, sc, h, new Set([chave(sr, sc)])).find((j) => igual(j.para, [r, c]));
@@ -426,7 +501,7 @@ class Jogo {
 
   fimSequencia() {
     const mov = { de: this.seq.de, passos: this.seq.passos };
-    this.log(`${NOME[this.humano]}: ${descreve(mov)}`);
+    this.log(`${NOME[this.humano]}: ${descreve(mov)}`, this.humano);
     this.seq = null;
     this.sel = null;
     this.terminaJogada(mov);
@@ -457,7 +532,7 @@ class Jogo {
     const mov = this.ia.escolhe(this.tab, this.pc);
     if (!mov) return this.fim(this.humano, "O computador ficou sem jogadas.");
     this.tab.aplica(mov);
-    this.log(`${NOME[this.pc]}: ${descreve(mov)}`);
+    this.log(`${NOME[this.pc]}: ${descreve(mov)}`, this.pc);
     this.nota = `${nota}O computador jogou ${descreve(mov)}.`;
     this.terminaJogada(mov);
   }
@@ -520,5 +595,4 @@ class Jogo {
   }
 }
 
-if (typeof document !== "undefined") document.addEventListener("DOMContentLoaded", () => new Jogo());
-if (typeof module !== "undefined") module.exports = { Tabuleiro, IA, AZUL, VERMELHA, oposta };
+new Jogo();
