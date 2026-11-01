@@ -1,13 +1,5 @@
 "use strict";
 
-/* =====================================================================
-   Alquerque - 1.ª entrega
-   Estrutura:
-     Tabuleiro : dados e regras (sem DOM)
-     IA        : escolha das jogadas do computador (sem DOM)
-     Jogo      : interface (DOM), turnos, sopro, mensagens, classificações
-   ===================================================================== */
-
 const N = 5;
 const VAZIO = 0, AZUL = 1, VERMELHA = 2;
 const NOME = { [AZUL]: "Azuis", [VERMELHA]: "Vermelhas" };
