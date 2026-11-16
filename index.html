@@ -1,21 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Alquerque</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
     <script src="requests.js" defer></script>
   </head>
   <body>
-
     <!-- ========== CABEÇALHO: logotipo + comandos ========== -->
     <header class="topo">
       <a class="logo" href="#">
         <svg viewBox="0 0 40 40" width="34" height="34">
-          <rect width="40" height="40" rx="8" fill="#b58863"/>
-          <path d="M7 8 H33 M8 20 H33 M8 32 H33 M8 8 V33 M20 8 V33 M32 8 V33 M8 8 L32 32 M32 8 L8 32" stroke="#5a3e2b" stroke-width="2" fill="none"/>
+          <rect width="40" height="40" rx="8" fill="#b58863" />
+          <path
+            d="M7 8 H33 M8 20 H33 M8 32 H33 M8 8 V33 M20 8 V33 M32 8 V33 M8 8 L32 32 M32 8 L8 32"
+            stroke="#5a3e2b"
+            stroke-width="2"
+            fill="none"
+          />
         </svg>
         <span>Alquerque</span>
       </a>
@@ -33,10 +37,8 @@
     </header>
 
     <main class="jogo">
-
       <!-- Área: Tabuleiro -->
       <section class="centro">
-
         <!-- Área: Mensagens -->
         <p class="painel mensagem" id="mensagens"></p>
 
@@ -45,22 +47,32 @@
         <div class="painel jogador-painel">
           <div class="jogador" id="jog-azul">
             <span class="avatar azul"></span>
-            <div><strong>Computador</strong><small>Peças Azuis · <span id="n-azul">12</span></small></div>
+            <div>
+              <strong>Computador</strong
+              ><small>Peças Azuis · <span id="n-azul">12</span></small>
+            </div>
           </div>
         </div>
 
         <div class="tabuleiro-caixa">
-          <div class="tabuleiro" id="tabuleiro" role="group" aria-label="Tabuleiro de Alquerque 5x5"></div>
+          <div
+            class="tabuleiro"
+            id="tabuleiro"
+            role="group"
+            aria-label="Tabuleiro de Alquerque 5x5"
+          ></div>
         </div>
 
         <!-- Jogador Vermelho (em baixo) -->
         <div class="painel jogador-painel">
           <div class="jogador" id="jog-vermelha">
             <span class="avatar vermelho"></span>
-            <div><strong>Convidado</strong><small>Peças Vermelhas · <span id="n-vermelha">12</span></small></div>
+            <div>
+              <strong>Convidado</strong
+              ><small>Peças Vermelhas · <span id="n-vermelha">12</span></small>
+            </div>
           </div>
         </div>
-
       </section>
 
       <!-- Área: Movimentos -->
@@ -69,9 +81,9 @@
           <h2 id="t-msg">Movimentos</h2>
           <ul id="lista-movimentos">
             <li class="linha-movimentos">
-              <div class="numero"> </div>
-              <div class="jogada vermelhas"> </div>
-              <div class="jogada azuis"> </div>
+              <div class="numero"></div>
+              <div class="jogada vermelhas"></div>
+              <div class="jogada azuis"></div>
             </li>
           </ul>
         </section>
@@ -86,9 +98,18 @@
       <section class="modal">
         <a class="fechar" href="#">x</a>
         <h2 id="t-instr">Como jogar</h2>
-        <p>Cada jogador começa com 12 peças. Move uma peça por jogada para um ponto vazio ligado por uma linha.</p>
-        <p>Para capturar, salta por cima de uma peça adversária para o ponto vazio logo a seguir, em linha reta.</p>
-        <p>Se puderes capturar uma peça e não o fizeres, o adversário na proxima ronda pode "soprar" essa peça.</p>
+        <p>
+          Cada jogador começa com 12 peças. Move uma peça por jogada para um
+          ponto vazio ligado por uma linha.
+        </p>
+        <p>
+          Para capturar, salta por cima de uma peça adversária para o ponto
+          vazio logo a seguir, em linha reta.
+        </p>
+        <p>
+          Se puderes capturar uma peça e não o fizeres, o adversário na proxima
+          ronda pode "soprar" essa peça.
+        </p>
         <p>Ganha quem capturar todas as peças do adversário.</p>
       </section>
     </div>
@@ -100,7 +121,14 @@
         <a class="fechar" href="#">x</a>
         <h2 id="t-class">Classificações</h2>
         <table>
-          <thead><tr><th>Nível</th><th>Vitórias</th><th>Derrotas</th><th>Empates</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Nível</th>
+              <th>Vitórias</th>
+              <th>Derrotas</th>
+              <th>Empates</th>
+            </tr>
+          </thead>
           <tbody id="tab-classificacoes"></tbody>
         </table>
       </section>
@@ -112,19 +140,22 @@
       <section class="modal">
         <a class="fechar" href="#">x</a>
         <h2 id="t-conf">Configuração</h2>
-        <label>Adversário
+        <label
+          >Adversário
           <select id="cfg-adversario">
             <option value="pc">Computador</option>
             <option value="outro" disabled>Outro jogador (2.ª entrega)</option>
           </select>
         </label>
-        <label>Primeiro a jogar
+        <label
+          >Primeiro a jogar
           <select id="cfg-primeiro">
             <option value="2">Vermelhas (tu)</option>
             <option value="1">Azuis (computador)</option>
           </select>
         </label>
-        <label>Nível da IA
+        <label
+          >Nível da IA
           <select id="cfg-nivel">
             <option value="1">Fácil</option>
             <option value="2" selected>Médio</option>
@@ -141,11 +172,18 @@
       <section class="modal">
         <a class="fechar" href="#">x</a>
         <h2 id="t-id">Entrar</h2>
-        <label>Nome de utilizador <input type="text" id = "username"></label>
-        <label>Palavra-passe <input type="password" id = "password"></label>
-        <a id= "login_button" class="btn btn-primario" href="#">Entrar</a>
+
+        <form>
+          <label>Nome de utilizador
+            <input type="text" id="username" name="username"/>
+          </label>
+          <label>Palavra-passe 
+            <input type="password" id="password" name="password"/>
+          </label>
+          <input id="submitButton" type="submit" class="btn btn-primario" value="Submit" />     <!-- visual bugs need fixing -->
+        </form>
+
       </section>
     </div>
-
   </body>
 </html>
