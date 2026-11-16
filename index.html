@@ -6,6 +6,7 @@
     <title>Alquerque</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+    <script src="requests.js" defer></script>
   </head>
   <body>
 
@@ -61,8 +62,6 @@
         </div>
 
       </section>
-
-      
 
       <!-- Área: Movimentos -->
       <aside class="coluna">
@@ -142,9 +141,9 @@
       <section class="modal">
         <a class="fechar" href="#">x</a>
         <h2 id="t-id">Entrar</h2>
-        <label>Nome de utilizador <input type="text" autocomplete="username"></label>
-        <label>Palavra-passe <input type="password" autocomplete="current-password"></label>
-        <a class="btn btn-primario" href="#">Entrar</a>
+        <label>Nome de utilizador <input type="text" id = "username"></label>
+        <label>Palavra-passe <input type="password" id = "password"></label>
+        <a id= "login_button" class="btn btn-primario" href="#">Entrar</a>
       </section>
     </div>
 
